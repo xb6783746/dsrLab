@@ -1,21 +1,29 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
+#include <string.h>
+
+typedef void (*FreeFunc)(void*);
+
 typedef struct Node {
 
-	double val;
+	void* val;
 	struct Node *next;
 } Node;
 
 typedef struct {
 
-	int size;
+    size_t elemSize;
+    FreeFunc freeFunc;
+
+	size_t size;
 	Node *head;
 } List;
 
-List createEmptyList();
-List createList(double val);
-void push(List *list, double val);
-double* toPlain(List* list);
+List createEmptyList(size_t elemSize, FreeFunc freeFunc);
+List createList(size_t elemSize, void* elem, FreeFunc freeFunc);
+
+void push(List *list, void* val);
+
 void delete(List* list);
 #endif

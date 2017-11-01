@@ -1,49 +1,30 @@
 #include <linked_list.h>
 #include <stdlib.h>
 
-Node* createNode(double val, Node* next);
+Node* createNode(size_t elemSize, void* val, Node* next);
 
-List createEmptyList(){
+List createEmptyList(size_t elemSize, FreeFunc freeFunc){
 
-    List list = {0, NULL};
+    List list = {elemSize, freeFunc, 0, NULL};
 
     return list;
 }
 
-List createList(double val){
+List createList(size_t elemSize, void* val, FreeFunc freeFunc){
 
-	Node* node = createNode(val, NULL);
+	Node* node = createNode(elemSize, val, NULL);
 
-	List list = {1, node};
+	List list = {elemSize, freeFunc, 1, node};
 
 	return list;
 }
 
-void push(List* list, double val){
+void push(List* list, void* val){
 
-	Node* node = createNode(val, list->head);
+	Node* node = createNode(list->elemSize, val, list->head);
 
 	list->head = node;
 	list->size++;
-}
-
-double* toPlain(List* list){
-
-	double* arr = (double*)malloc(list->size * sizeof(double));
-
-	int i = 0;
-
-	Node* node = list->head;
-
-    while(node){
-
-        arr[i] = node->val;
-        i++;
-
-        node = node->next;
-    }
-
-	return arr;
 }
 
 void delete(List* list){
@@ -56,15 +37,17 @@ void delete(List* list){
 
 		node = node->next;
 
-		free(curr);
+		list->freeFunc(curr);
 	}
 }
 
-Node* createNode(double val, Node* next){
+Node* createNode(size_t elemSize, void* val, Node* next){
 
 	Node* node = (Node*)malloc(sizeof(Node));
 
-	node->val = val;
+	node->val = (void*)malloc(elemSize);
+    memcpy(node->val, val, elemSize);
+
 	node->next = next;
 
 	return node;
