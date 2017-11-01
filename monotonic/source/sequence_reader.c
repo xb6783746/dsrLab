@@ -5,22 +5,18 @@
 #include <stdio.h>
 
 int readFile(const char** string, const char* filename);
+double* toDoubleArray(List* list);
 
-int readSequence(const char* filename, double** arr, int* count){
+int readSequence(const char* filename, double** arr, size_t* count){
 
     const char* string;
     
     readFile(&string, filename); 
 
-    List list = createEmptyList();
-
     char separators[] = {',', ' '};
     ParseParams params = {string, separators, 2};
 
-    parse(params, &list);
-
-    *arr = toPlain(&list);
-    *count = list.size;
+    parse(params, arr, count);
   
     return 0;
 }
@@ -45,3 +41,5 @@ int readFile(const char** string, const char* filename){
 
     return 0;
 }
+
+
