@@ -18,6 +18,7 @@ typedef struct {
 
 	size_t size;
 	Node *head;
+    Node *tail;
 } List;
 
 List createEmptyList(size_t elemSize, FreeFunc freeFunc);
