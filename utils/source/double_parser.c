@@ -1,9 +1,18 @@
 #include <double_parser.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int contains(char ch, const char* arr, int count);
+void freeDoubleList(void* elem){
 
-int parse(ParseParams params, List* list){
+    free(elem);
+}
+
+double* toDoubleArray(List* list);
+
+int parse(ParseParams params, double** arr, size_t* count){
+
+    List list = createEmptyList(sizeof(double), &freeDoubleList);
     
     const char* string = params.string;
 
@@ -16,14 +25,17 @@ int parse(ParseParams params, List* list){
 
 			int readed = sscanf(string, "%lf", &val);
 
-			push(list, val);
+			push(&list, &val);
             string += readed;
 
-            Node* node = list->head;
+            Node* node = list.head;
         }
         
 	    string++;
 	}
+
+    *arr = toDoubleArray(&list);
+    *count = list.size;
 
 	return 0;
 }
@@ -42,4 +54,24 @@ int contains(char ch, const char* arr, int count){
 	}
 
 	return result;
+}
+
+double* toDoubleArray(List* list){
+
+    double* arr = (double*)malloc(list->size * sizeof(double));
+
+    int i = 0;
+
+    Node* node = list->head;
+
+    while(node){
+
+        arr[i] = *(double*)(node->val);
+
+        node = node->next;
+
+        i++;
+    }
+    
+    return arr;
 }
