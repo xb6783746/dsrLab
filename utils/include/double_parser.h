@@ -13,7 +13,7 @@ typedef struct{
 	const int sepsCount;
 } ParseParams;
 
-int parse(ParseParams params, List* list);
+int parse(ParseParams params, double** arr, size_t* count);
 
 #endif
 
