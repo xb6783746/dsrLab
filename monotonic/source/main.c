@@ -8,7 +8,7 @@ int main(int argc, char** argv){
     char* filename = argv[1];
 
     double* arr;
-    int count;
+    size_t count;
 
     printf("%s\n", filename);
     readSequence(filename, &arr, &count);

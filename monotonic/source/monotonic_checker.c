@@ -28,7 +28,7 @@ void add(Array* arr, SequenceInfo val);
 
 int findMinDelCount(Array* arr);
 
-int getMinDeleteCount(const double* arr, int count){
+int getMinDeleteCount(const double* arr, size_t count){
 
     Array seqArr = {0, 0};
 
