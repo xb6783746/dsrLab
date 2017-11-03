@@ -3,6 +3,9 @@
 
 #include <string.h>
 
+
+/* Обобщенный связный список*/
+
 typedef void (*FreeFunc)(void*);
 
 typedef struct Node {
