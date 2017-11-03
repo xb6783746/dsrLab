@@ -1,9 +1,13 @@
 #include <concat.h>
 #include <stdlib.h>
 
+
 int startsWith(const char* start, const char* word);
+
+/* Записывает в массив buff все элементы массива arr, за исключением элемента с индексом except*/
 void except(const char** arr, size_t size, size_t except, const char** buff);
 
+/* Проверяет, можно ли составить слово word из слов массива dictionary*/
 int check(const char** dictionary, size_t dictLength, const char* word){
 
     if(!*word){
@@ -14,6 +18,8 @@ int check(const char** dictionary, size_t dictLength, const char* word){
     const char** arr = (const char**)malloc((dictLength - 1) * sizeof(char*));
     int res = 0;
 
+    /* Для всех слов из словаря, с которых начинается слово word, рекурсивно вызывается метод
+     * для остатка слова word и нового словаря за исключением использованного слова */
     for(size_t i = 0; i < dictLength && !res; i++){
 
         if(startsWith(dictionary[i], word)){

@@ -6,13 +6,18 @@
 #include <concat.h>
 #include <line_reader.h>
 
+/* Текстовый файл состоит из двух строк. 
+ *Определить, есть ли во второй строке слова, которые не получаются путём конкатенации нескольких слов из первой строки.*/
 typedef struct {
 
     char** arr;
     size_t length;
 } StringArray;
 
+/* Загружает два массива строк из файла*/
 int load(const char* filename, StringArray arr[2]);
+
+/* Проверяет, есть ли во втором массиве такое слово, которое нельзя составить из слов первого*/
 int process(StringArray* dict, StringArray* words);
 
 int main(int argc, char** argv){
