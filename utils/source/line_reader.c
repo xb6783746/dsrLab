@@ -37,7 +37,7 @@ int readLine(FILE* fd, char** line){
 
     *line = toString(&list, block, i);
 
-    delete(&list);
+    delete(&list, 0);
 
     return 0;
 }

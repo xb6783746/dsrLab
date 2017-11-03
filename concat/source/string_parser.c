@@ -30,7 +30,7 @@ int parse(const char* string, char*** arr, size_t* count){
     *arr = toStringArray(&list);
     *count = list.size;
 
-    delete(&list);
+    delete(&list, 0);
 
     return 0;
 }
