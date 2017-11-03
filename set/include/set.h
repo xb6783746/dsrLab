@@ -18,5 +18,5 @@ void add(Set* set, void* elem);
 int contains(Set* set, void* elem);
 int isSubset(Set* set, Set* subset);
 
-void deleteSet(Set* set);
+void deleteSet(Set* set, int delElems);
 #endif

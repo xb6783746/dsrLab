@@ -47,8 +47,8 @@ int isSubset(Set* set, Set* subset){
     return res;
 }
 
-void deleteSet(Set* set){
+void deleteSet(Set* set, int delElems){
 
-    delete(&(set->list));
+    delete(&(set->list), delElems);
 }
 

@@ -13,6 +13,10 @@ typedef struct{
 	const int sepsCount;
 } ParseParams;
 
+/* Парсит строку согласно заданным разделителям на вещественные числа, 
+ * создает массив соответствующего размера и записывает его в arr,
+ * а длину массива - в count
+ */
 int parse(ParseParams params, double** arr, size_t* count);
 
 #endif

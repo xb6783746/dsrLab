@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Имеется два текстовых файла. 
+ * Определить, может ли второй файл быть получен путём перестановки и дублирования некоторых строк первого файла.*/
 int readFile(const char* filename, Set* set);
 
 void freeString(void* elem){
@@ -19,6 +21,7 @@ int equalsString(void* first, void* second){
     return strcmp(firstString, secondString) == 0;
 }
 
+/* Условия задачи выполняются, если множество строк второго файла содержится в множестве строк первого*/
 int main(int argc, char** argv){
     
     Set sets[2];

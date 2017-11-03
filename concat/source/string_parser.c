@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* Превращает элементы обобщенного списка в массив строк */
 char** toStringArray(List* list);
 
 void stringFreeFunc(void* elem){
@@ -10,6 +11,7 @@ void stringFreeFunc(void* elem){
     free(elem);
 }
 
+/* Разделяет строку string на отдельные слова по пробелам */
 int parse(const char* string, char*** arr, size_t* count){
 
     List list = createEmptyList(sizeof(char*), &stringFreeFunc);
@@ -28,7 +30,7 @@ int parse(const char* string, char*** arr, size_t* count){
     *arr = toStringArray(&list);
     *count = list.size;
 
-    delete(&list);
+    delete(&list, 0);
 
     return 0;
 }

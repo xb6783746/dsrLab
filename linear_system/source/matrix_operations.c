@@ -1,7 +1,9 @@
 #include <matrix_operations.h>
 #include <stdio.h>
 
-
+/* Ищет в столбце colNum, начиная со строки fromRow, ненулевой элемент и возвращает его строку
+ * - нужно в методе приведения матрицы к ступенчатому виду
+ */
 size_t findNonzeroElement(Matrix* matrix, size_t fromRow, size_t colNum);
 void swapRows(Matrix* matrix, size_t row1, size_t row2);
 

@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* Текстовый файл состоит из N строк, в каждой из которых записано N десятичных чисел A1,…,AN. 
+ * Решить систему линейных уравнений AX=0*/
 void printAnswer(Answer ans);
 
 int main(int argc, char** argv){

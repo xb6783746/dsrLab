@@ -3,6 +3,9 @@
 
 #include <string.h>
 
+
+/* Обобщенный связный список*/
+
 typedef void (*FreeFunc)(void*);
 
 typedef struct Node {
@@ -26,5 +29,5 @@ List createList(size_t elemSize, void* elem, FreeFunc freeFunc);
 
 void push(List *list, void* val);
 
-void delete(List* list);
+void delete(List* list, int delElems);
 #endif

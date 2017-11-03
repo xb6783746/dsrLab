@@ -36,7 +36,7 @@ void push(List* list, void* val){
 	list->size++;
 }
 
-void delete(List* list){
+void delete(List* list, int delElems){
 
 	Node* node = list->head;
 	
@@ -46,7 +46,12 @@ void delete(List* list){
 
 		node = node->next;
 
-		list->freeFunc(curr);
+        if(delElems){
+            
+            list->freeFunc(curr->val);
+        }
+        
+        free(curr);
 	}
 }
 
