@@ -35,7 +35,7 @@ void printAnswer(Answer ans){
 
     for(size_t i = 0; i < ans.count; i++){
 
-        printf("x%d = ", i);
+        printf("x%lu = ", i);
 
         printExpression(ans.elems[i]);
         
