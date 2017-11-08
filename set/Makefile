@@ -16,8 +16,13 @@ CFLAGS = -g -I $(INCLUDE_DIR) -I $(LIB_INCLUDE_DIR)
 SOURCE = $(notdir $(wildcard $(SOURCE_DIR)/*.c))
 OBJS = $(SOURCE:.c=.o)
 
+.PHONY: all clean
+
 all: $(OUT_DIR) $(OBJS) libs
 	$(CC) $(CFLAGS) -o $(OUT_DIR)/$(TARGET) $(addprefix $(OUT_DIR)/, $(OBJS)) $(LIBS_OBJ)
+	
+clean:
+	rm -r $(OUT_DIR)/*
 
 %.o:
 	$(CC) $(CFLAGS) -o $(OUT_DIR)/$@ -c $(SOURCE_DIR)/$(@:.o=.c)
