@@ -12,7 +12,7 @@ void stringFreeFunc(void* elem){
 }
 
 /* Разделяет строку string на отдельные слова по пробелам */
-int parse(const char* string, char*** arr, size_t* count){
+int parse(char* string, char*** arr, size_t* count){
 
     List list = createEmptyList(sizeof(char*), &stringFreeFunc);
 

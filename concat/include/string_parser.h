@@ -4,6 +4,6 @@
 #include <string.h>
 
 /* Разделяет строку string на отдельные слова по пробелам */
-int parse(const char* string, char*** arr, size_t* count);
+int parse(char* string, char*** arr, size_t* count);
 
 #endif
