@@ -5,10 +5,6 @@
 void forward(Matrix* coeffs);
 void backward(Matrix* coeffs, Answer* ans);
 
-/* Если переменная независимая, создает выражение-переменную с данным номером
- * Если переменная зависимая, создает выражение-константу с коэфф-м перед переменной */
-Expression* createVarExpr(Matrix* matrix, size_t varNum);
-
 int solve(Matrix* coeffs, Answer* ans){
     
     forward(coeffs);
@@ -39,22 +35,17 @@ void backward(Matrix* coeffs, Answer* ans){
 
     Expression** answer = ans->elems;
 
-    //Инициализация выражений для переменных
-    for(int i = 0; i < n; i++){
-        
-        answer[i] = createVarExpr(coeffs, i); 
-    }
-
     //Цикл по всем уравнениям системы
     for(int i = n - 1; i >= 0; i--){
 
-        Expression* valI = answer[i];
+        double coeff = coeffs->elems[i][i];
 
-        //Уравнения для независимых переменных не рассматриваются
-        if(valI->type == Variable){
-
+        //Если коэфф. перед переменной == 0, то она независимая
+        if(coeff == 0){
+            
+            answer[i] = fromVariable(i);
             continue;
-        }
+	}
 
         double* rowI = coeffs->elems[i];
         
@@ -74,15 +65,7 @@ void backward(Matrix* coeffs, Answer* ans){
             }
         }
 
-        answer[i] = apply(Div, expr, valI);
+        answer[i] = apply(Div, expr, fromValue(coeff));
     }
-}
-
-Expression* createVarExpr(Matrix* matrix, size_t varNum){
-
-    double val = matrix->elems[varNum][varNum];
-
-    //Если коэфф. перед переменной == 0, то переменная независимая
-    return val == 0? fromVariable(varNum) : fromValue(val);
 }
 
