@@ -64,7 +64,7 @@ int process(StringArray* dict, StringArray* words){
 
     for(size_t i = 0; i < words->length; i++){
 
-        res = check(dict->arr, dict->length, words->arr[i]);
+        res = check((const char**)dict->arr, dict->length, words->arr[i]);
 
 	if(!res){
 
