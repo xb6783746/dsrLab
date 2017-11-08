@@ -17,7 +17,8 @@ typedef struct {
 /* Загружает два массива строк из файла*/
 int load(const char* filename, StringArray arr[2]);
 
-/* Проверяет, есть ли во втором массиве такое слово, которое нельзя составить из слов первого*/
+/* Проверяет, есть ли во втором массиве такое слово, которое нельзя составить из слов первого.
+ * Возвращает true, если таких слов нет */
 int process(StringArray* dict, StringArray* words);
 
 int main(int argc, char** argv){
@@ -59,12 +60,17 @@ int load(const char* filename, StringArray arr[2]){
 
 int process(StringArray* dict, StringArray* words){
 
-    int res = 1;
+    int res;
 
-    for(size_t i = 0; i < words->length && res; i++){
+    for(size_t i = 0; i < words->length; i++){
 
         res = check(dict->arr, dict->length, words->arr[i]);
+
+	if(!res){
+
+            return 0;
+	}
     }
 
-    return res;
+    return 1;
 }
