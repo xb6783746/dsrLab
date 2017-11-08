@@ -2,43 +2,44 @@
 #include <matrix_operations.h>
 #include <stdlib.h>
 
-void forward(Matrix* coeffs);
-void backward(Matrix* coeffs, Answer* ans);
+void forward(Matrix* matrix);
+void backward(Matrix* matrix, Answer* ans);
 
-int solve(Matrix* coeffs, Answer* ans){
+int solve(Matrix* matrix, Answer* ans){
     
-    forward(coeffs);
+    forward(matrix);
 
-    size_t rnk = rank(coeffs);
+    size_t rnk = rank(matrix);
 
-    if(rnk == coeffs->rows){
+    if(rnk == matrix->rows){
     
         return 0;
     }
 
-    ans->elems = (Expression**)malloc(coeffs->rows * sizeof(Expression*));
-    ans->count = coeffs->rows;
+    ans->elems = (Expression**)malloc(matrix->rows * sizeof(Expression*));
+    ans->count = matrix->rows;
 
-    backward(coeffs, ans);
+    backward(matrix, ans);
 
     return 1;
 }
 
-void forward(Matrix* coeffs){
+void forward(Matrix* matrix){
 
-    makeTriangle(coeffs);
+    makeTriangle(matrix);
 }
 
-void backward(Matrix* coeffs, Answer* ans){
+void backward(Matrix* matrix, Answer* ans){
 
-    size_t n = coeffs->rows;
+    size_t n = matrix->rows;
 
     Expression** answer = ans->elems;
 
     //Цикл по всем уравнениям системы
     for(int i = n - 1; i >= 0; i--){
 
-        double coeff = coeffs->elems[i][i];
+        double* rowI = matrix->elems[i];
+        double coeff = rowI[i];
 
         //Если коэфф. перед переменной == 0, то она независимая
         if(coeff == 0){
@@ -47,8 +48,6 @@ void backward(Matrix* coeffs, Answer* ans){
             continue;
 	}
 
-        double* rowI = coeffs->elems[i];
-        
         Expression* expr = NULL;
         
         // x(i) = (C(i+1)*x(i+1) - C(i+2)*x(i+2) ... ) / C(i)
