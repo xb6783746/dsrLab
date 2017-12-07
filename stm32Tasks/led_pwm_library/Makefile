@@ -12,6 +12,8 @@ SPL_SOURCE=stm32f4xx_gpio.c stm32f4xx_rcc.c stm32f4xx_tim.c stm32f4xx_exti.c stm
 
 PROJECT_OBJS=$(PROJECT_SOURCE:$(SRC_DIR)/%.c=$(OUT_DIR)/%.o)
 
+DEFS += -DUSE_PWM_TIM1
+
 all: library
 
 include ../Makefile.rules
