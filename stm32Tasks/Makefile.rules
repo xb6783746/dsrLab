@@ -1,0 +1,146 @@
+
+LIB_DIR=$(ROOT)/common
+
+SPL_HOME=$(LIB_DIR)/spl
+CMSIS_HOME=$(LIB_DIR)/CMSIS
+
+SPL_SRC_HOME=$(SPL_HOME)/src
+SPL_BUILD_HOME=$(SPL_HOME)/build
+
+LDSCRIPT_HOME?=$(LIB_DIR)/ld
+STARTUP_SCRIPT_HOME?=$(LIB_DIR)/startup
+
+LDSCRIPT_NAME?=stm32f4xx_flash.ld
+STARTUP_SCRIPT_NAME?=startup_stm32f40_41xxx.S
+
+LDSCRIPT?=$(LDSCRIPT_HOME)/$(LDSCRIPT_NAME)
+
+STARTUP_S?=$(STARTUP_SCRIPT_HOME)/src/$(STARTUP_SCRIPT_NAME)
+STARTUP?=$(STARTUP_SCRIPT_HOME)/build/$(STARTUP_SCRIPT_NAME:%.S=%.o)
+
+SPL_OBJS=$(addprefix $(SPL_BUILD_HOME)/, $(SPL_SOURCE:.c=.o))
+
+OBJS=$(PROJECT_OBJS) $(SPL_OBJS)
+
+PREFIX            ?= arm-none-eabi
+
+CC                := $(PREFIX)-gcc
+CXX               := $(PREFIX)-g++
+LD                := $(PREFIX)-gcc
+AR                := $(PREFIX)-ar
+AS                := $(PREFIX)-as
+OBJCOPY           := $(PREFIX)-objcopy
+OBJDUMP           := $(PREFIX)-objdump
+GDB               := $(PREFIX)-gdb
+STFLASH            = $(shell which st-flash) 
+STUTIL             = $(shell which st-util) 
+CD                := cd
+
+
+# Be silent per default, but 'make V=1' will show all compiler calls.
+ifneq ($(V),1)
+Q := @
+NULL := 2>/dev/null
+endif
+
+INCLUDE_DIRS +=-I $(SPL_HOME)/include -I $(CMSIS_HOME)/include
+
+FP_FLAGS       ?= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+ARCH_FLAGS     = -mthumb -mcpu=cortex-m4 $(FP_FLAGS)
+
+DEFS += -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx -DUSE_STM32F4DISC_EVAL \
+       -DUSE_EXT_LEDS
+
+# C flags
+
+CFLAGS                += -O0 -g
+CFLAGS                += -Wall -Wextra -Wshadow -Wimplicit-function-declaration
+CFLAGS                += -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes
+CFLAGS                += -fno-common -ffunction-sections -fdata-sections
+
+###############################################################################
+
+# C++ flags
+
+CXXFLAGS        += -Os -g
+CXXFLAGS        += -Wextra -Wshadow -Wredundant-decls -Weffc++
+CXXFLAGS        += -fno-common -ffunction-sections -fdata-sections
+
+###############################################################################
+
+# C & C++ preprocessor common flags
+
+CPPFLAGS        += -MD
+CPPFLAGS        += -Wall -Wundef
+CPPFLAGS        += $(INCLUDE_DIRS) $(DEFS)
+
+###############################################################################
+
+# Linker flags
+
+LDFLAGS                += --static -nostartfiles
+LDFLAGS                += -L$(LIB_DIR) -L$(BUILD_HOME)/ld
+LDFLAGS                += -T$(LDSCRIPT)
+LDFLAGS                += -Wl,-Map=$(*).map
+LDFLAGS                += -Wl,--gc-sections
+ifeq ($(V),1)
+LDFLAGS                += -Wl,--print-gc-sections
+endif
+
+###############################################################################
+.SUFFIXES: .elf .bin .hex .srec .list .map .images
+.SECONDARY: $(OBJS) $(STARTUP) $(OUT_DIR)/$(BINARY).elf
+
+
+library: $(OUT_DIR)/$(BINARY).a
+	@printf "*** $^ library generated ***\n"
+
+images: $(OUT_DIR)/$(BINARY).bin
+	@printf "*** $^ image generated ***\n"
+
+load: images
+	$(STFLASH) write $(OUT_DIR)/$(BINARY).bin 0x8000000
+
+clean:
+	$(Q)$(CD) $(OUT_DIR) && $(RM) *.a *.o *.d *.elf *.bin *.hex *.srec *.list *.map
+
+debug: clean load
+	$(Q)$(STUTIL) &
+	$(Q)$(GDB) --tui --eval-command="tar extended-remote :4242" $(OUT_DIR)/$(BINARY).elf
+
+%.a: $(OBJS)
+	@printf " AR $(*).a\n"
+	$(Q)$(AR) rcs -o $(@) -c $(OBJS)
+
+%.bin: %.elf
+	@printf " OBJCOPY $(*).bin\n"
+	$(Q)$(OBJCOPY) -Obinary $(^) $(@)
+
+%.hex: %.elf
+	@printf " OBJCOPY $(*).hex\n"
+	$(Q)$(OBJCOPY) -Oihex $(*).elf $(*).hex
+
+%.srec: %.elf
+	@printf " OBJCOPY $(*).srec\n"
+	$(Q)$(OBJCOPY) -Osrec $(*).elf $(*).srec
+
+%.list: %.elf
+	@printf " OBJDUMP $(*).list\n"
+	$(Q)$(OBJDUMP) -S $(*).elf > $(*).list
+
+%.elf: $(OBJS) $(LDSCRIPT) $(STARTUP) $(LDLIBS)
+	@printf " LD $(*).elf\n"
+	$(Q)$(LD) $(LDFLAGS) $(ARCH_FLAGS) $(OBJS) $(STARTUP) $(LDLIBS) -o $(@)
+
+$(STARTUP): $(STARTUP_S)
+	$(Q)mkdir -p $(@D)
+	$(Q)$(AS) $< -o $(@)
+
+$(SPL_BUILD_HOME)/%.o: $(SPL_SRC_HOME)/%.c
+	$(Q)$(CD) $(SPL_HOME) && $(MAKE)
+
+$(OUT_DIR)/%.o: $(SRC_DIR)/%.c
+	@printf " CC $(@)\n"
+	$(Q)mkdir -p $(@D)
+	$(Q)$(CC) $(CFLAGS) $(CPPFLAGS) $(ARCH_FLAGS) -o $(@) -c $(^)
+
