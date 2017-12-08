@@ -21,6 +21,7 @@ STARTUP?=$(STARTUP_SCRIPT_HOME)/build/$(STARTUP_SCRIPT_NAME:%.S=%.o)
 SPL_OBJS=$(addprefix $(SPL_BUILD_HOME)/, $(SPL_SOURCE:.c=.o))
 
 OBJS=$(PROJECT_OBJS) $(SPL_OBJS)
+LDLIBS=$(addprefix -L, $(LIBS))
 
 PREFIX            ?= arm-none-eabi
 
@@ -128,7 +129,7 @@ debug: clean load
 	@printf " OBJDUMP $(*).list\n"
 	$(Q)$(OBJDUMP) -S $(*).elf > $(*).list
 
-%.elf: $(OBJS) $(LDSCRIPT) $(STARTUP) $(LDLIBS)
+%.elf: $(OBJS) $(LDSCRIPT) $(STARTUP) $(LIBS)
 	@printf " LD $(*).elf\n"
 	$(Q)$(LD) $(LDFLAGS) $(ARCH_FLAGS) $(OBJS) $(STARTUP) $(LDLIBS) -o $(@)
 
