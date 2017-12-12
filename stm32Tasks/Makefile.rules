@@ -21,7 +21,6 @@ STARTUP?=$(STARTUP_SCRIPT_HOME)/build/$(STARTUP_SCRIPT_NAME:%.S=%.o)
 SPL_OBJS=$(addprefix $(SPL_BUILD_HOME)/, $(SPL_SOURCE:.c=.o))
 
 OBJS=$(PROJECT_OBJS) $(SPL_OBJS)
-LDLIBS=$(addprefix -L, $(LIBS))
 
 PREFIX            ?= arm-none-eabi
 
@@ -46,7 +45,7 @@ endif
 
 INCLUDE_DIRS +=-I $(SPL_HOME)/include -I $(CMSIS_HOME)/include
 
-FP_FLAGS       ?= -mfloat-abi=hard -mfpu=fpv4-sp-d16
+FP_FLAGS       ?= -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nano.specs -specs=nosys.specs
 ARCH_FLAGS     = -mthumb -mcpu=cortex-m4 $(FP_FLAGS)
 
 DEFS += -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx -DUSE_STM32F4DISC_EVAL \
@@ -131,7 +130,7 @@ debug: clean load
 
 %.elf: $(OBJS) $(LDSCRIPT) $(STARTUP) $(LIBS)
 	@printf " LD $(*).elf\n"
-	$(Q)$(LD) $(LDFLAGS) $(ARCH_FLAGS) $(OBJS) $(STARTUP) $(LDLIBS) -o $(@)
+	$(Q)$(LD) $(LDFLAGS) $(LIBPATHS) $(ARCH_FLAGS) $(OBJS) $(STARTUP) $(LDLIBS) -o $(@)
 
 $(STARTUP): $(STARTUP_S)
 	$(Q)mkdir -p $(@D)

@@ -1,7 +1,9 @@
 ROOT=..
 
+LED_LIB_DIR=$(ROOT)/led_pwm_library
+
 SRC_DIR=src
-INCLUDE_DIRS=-I include -I $(ROOT)/led_pwm_library/include
+INCLUDE_DIRS=-I include -I $(LED_LIB_DIR)/include
 OUT_DIR=build
 
 BINARY = main
@@ -12,11 +14,15 @@ SPL_SOURCE=stm32f4xx_gpio.c stm32f4xx_rcc.c stm32f4xx_tim.c stm32f4xx_exti.c stm
 
 PROJECT_OBJS=$(PROJECT_SOURCE:$(SRC_DIR)/%.c=$(OUT_DIR)/%.o)
 
-LIBS=$(ROOT)/led_pwm_library/build/libledpwm.a
+LIBPATHS=-L $(LED_LIB_DIR)/build
+
+LIBS=ledpwm
+LDLIBS=$(addprefix -l, $(LIBS))
+DEFS=-DBRIGHTNESS_BUTTON_LINE=0 -DCHANNEL_BUTTON_LINE=1
 
 all: images
 
-$(ROOT)/led_pwm_library/build/libledpwm.a:
-	$(Q)$(CD) $(ROOT)/led_pwm_library/ && $(MAKE)
+ledpwm:
+	$(Q)$(CD) $(LED_LIB_DIR)/ && $(MAKE)
 
 include ../Makefile.rules
