@@ -1,6 +1,8 @@
 #ifndef LED_PWM_CONFIGURATION
 #define LED_PWM_CONFIGURATION
 
+#include <stm32f4xx.h>
+
 #ifdef USE_PWM_TIM1
 
     #define PWM_GPIO GPIOA
@@ -88,5 +90,9 @@
 
     #define PWM_FREQ 100
 #endif
+
+#define PWM_TIM_FREQ 100000
+#define PRESCALER PWM_TIM_CLOCK / PWM_TIM_FREQ
+#define ARR_VAL PWM_TIM_FREQ / PWM_FREQ
 
 #endif
