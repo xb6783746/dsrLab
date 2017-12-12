@@ -1,0 +1,36 @@
+#include <stm32f4xx.h>
+
+#include <handlers/interrupt_handler_utils.h>
+
+#ifndef CHANNEL_BUTTON_LINE
+
+    #define CHANNEL_BUTTON_LINE 1
+    #pragma message "Line for channel button wasn't specified. Default value is 1"
+
+#endif
+
+#define EXTI_HANDLER_NAME GET_EXTI_HANDLER_NAME(CHANNEL_BUTTON_LINE)
+#define EXTI_LINE_NAME GET_EXTI_LINE_NAME(CHANNEL_BUTTON_LINE)
+
+#define BUTTON_DELAY_MS 1000
+
+extern uint32_t systimer_timestamp;
+static uint32_t delay = 0;
+char channelButtonFlag = 0;
+
+void EXTI_HANDLER_NAME(void) {
+    
+    if (EXTI_GetITStatus(EXTI_LINE_NAME) != RESET){
+        
+        EXTI_ClearITPendingBit(EXTI_LINE_NAME);
+        
+        if(delay - systimer_timestamp < BUTTON_DELAY_MS){
+         
+            return;
+        }
+        
+        delay = systimer_timestamp + BUTTON_DELAY_MS;
+        
+        channelButtonFlag = 1;
+    }
+}
