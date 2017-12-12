@@ -1,28 +1,31 @@
 #include <button_event_handler.h>
+#include <led_api.h>
+
+#define CHANNEL_COUNT 3
+#define STEP 10
 
 extern char brightnessButtonFlag;
 extern char channelButtonFlag;
 
-static Channel* order;
-static int orderCount;
-static char step;
+static Channel order[CHANNEL_COUNT];
 
 static char currBrightness;
 static uint32_t currChannel;
 
 void initButtonEventHandler(){
 
-    step = 10;
-
-    orderCount = 3;
-    order = (Channel*)malloc(orderCount * sizeof(Channel));
-
     order[0] = Red;
     order[1] = Green;
     order[2] = Blue;
 
-    currBrightness = 0;
+    currBrightness = 255;
     currChannel = 0;
+    
+    brightnessButtonFlag = 0;
+    channelButtonFlag = 0;
+    
+    setRGB(0, 0, 0);
+    setBrightness(currBrightness, order[currChannel]); 
 }
 
 void processButtonEvents(void){
@@ -31,31 +34,19 @@ void processButtonEvents(void){
         
         brightnessButtonFlag = 0;
         
-        currBrightness = (currBrightness + step) % 100;
+        currBrightness = (currBrightness + STEP) % 255;
         
-        setBrightness(order[currChannel], currBrightness);  
+        setBrightness(currBrightness, order[currChannel]);  
     }
 
     if(channelButtonFlag){
         
         channelButtonFlag = 0;
 
-        setBrightness(order[currChannel], 0);
+        setBrightness(0, order[currChannel]);
 
-        currChannel = (currChannel + 1) % orderCount;
+        currChannel = (currChannel + 1) % CHANNEL_COUNT;
         
-        setBrightness(order[currChannel], currBrightness);
+        setBrightness(currBrightness, order[currChannel]);
     }    
 }
-
-void setOrder(Channel* orderArr, uint32_t count){
-    
-    order = orderArr;
-    orderCount = count;
-}
-
-void setStep(char val){
-
-    step = val;
-}
-
