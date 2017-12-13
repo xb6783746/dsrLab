@@ -3,6 +3,12 @@
 
 #include <stm32f4xx.h>
 
+/**
+ * @file internal/led_pwm_configuration.h
+ *
+ * Contains defines for different timers
+ */
+
 #ifdef USE_PWM_TIM1
 
     #define PWM_GPIO GPIOA
