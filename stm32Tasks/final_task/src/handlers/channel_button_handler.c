@@ -1,6 +1,6 @@
 #include <stm32f4xx.h>
 
-#include <handlers/interrupt_handler_utils.h>
+#include <utils/exti_utils.h>
 
 #ifndef CHANNEL_BUTTON_LINE
 
