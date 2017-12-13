@@ -3,8 +3,23 @@
 
 #include <stm32f4xx.h>
 
+/**
+ * @file src/pwm_configuration.c
+ * 
+ * Functions for init PWM and GPIOs
+ */
+
+/**
+ * @brief Inits pins, connected to first three timer channels for alternate function
+ */
 static void initLeds(void);
+/**
+ * @brief Inits timer with defined PWM_FREQ
+ */
 static void initTimer(void);
+/**
+ * @brief Inits PWM on first three channels
+ */
 static void initPwm(void);
 
 void initLedsPWM(){

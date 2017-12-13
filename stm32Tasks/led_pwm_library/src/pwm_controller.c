@@ -3,6 +3,12 @@
 
 #include <stm32f4xx.h>
 
+/**
+ * @file pwm_controller.c
+ *
+ * Functions for low-level PWM controlling
+ */
+
 void setChannelPower(char val, char channel){
     
     uint32_t pulse = ARR_VAL * val / 255;
