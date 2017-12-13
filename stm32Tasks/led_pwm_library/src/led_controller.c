@@ -6,7 +6,7 @@
 
 #ifndef GAMMA_CORRECTION_PARAMETER
 
-#define GAMMA_CORRECTION_PARAMETER 2.2
+#define GAMMA_CORRECTION_PARAMETER 3.03
 #endif
 
 /**
@@ -16,7 +16,7 @@
  *
  * Functions sets gamma-corected values of brightness.
  * \f$ realValue = 255 * (\frac{x}{255})^\gamma \f$, where value of \f$ \gamma \f$ can be defined as
- * GAMMA_CORRECTION_PARAMETER. Default value is 2.2
+ * GAMMA_CORRECTION_PARAMETER. Default value is 3.03
  */
 
 int __errno;
