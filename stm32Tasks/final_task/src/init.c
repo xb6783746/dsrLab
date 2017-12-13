@@ -8,7 +8,7 @@
 
 #define BUTTONS_PORT_SOURCE     EXTI_PortSourceGPIOE
 
-#define BUTTONS_GPIO            GPIOA
+#define BUTTONS_GPIO            GPIOE
 
 #define BRIGHTNESS_BUTTON_PIN   GPIO_Pin_0
 #define BRIGHTNESS_BUTTON_PS    EXTI_PinSource0
