@@ -11,7 +11,7 @@ extern char channelButtonFlag;
 static Channel extLedsChannels[CHANNEL_COUNT];
 static Stm32f4disc_leds_enum leds[CHANNEL_COUNT];
 
-static char currBrightness;
+static char currBrightness[CHANNEL_COUNT];
 static uint32_t currChannel;
 
 void initButtonEventHandler(){
@@ -26,14 +26,17 @@ void initButtonEventHandler(){
     leds[1] = DISC_GreenLed;
     leds[2] = DISC_BlueLed;
 
-    currBrightness = 255;
+    currBrightness[0] = 255;
+    currBrightness[1] = 0;
+    currBrightness[2] = 0;
+    
     currChannel = 0;
     
     brightnessButtonFlag = 0;
     channelButtonFlag = 0;
     
     setRGB(0, 0, 0);
-    setBrightness(currBrightness, extLedsChannels[currChannel]); 
+    setBrightness(currBrightness[currChannel], extLedsChannels[currChannel]); 
     switchLed(leds[currChannel], 1);
 }
 
@@ -43,9 +46,11 @@ void processButtonEvents(void){
         
         brightnessButtonFlag = 0;
         
-        currBrightness = (currBrightness + STEP) % 255;
+        char br = currBrightness[currChannel];
         
-        setBrightness(currBrightness, extLedsChannels[currChannel]);  
+        currBrightness[currChannel] = (br + STEP) % 255;
+        
+        setBrightness(currBrightness[currChannel], extLedsChannels[currChannel]);  
     }
 
     if(channelButtonFlag){
