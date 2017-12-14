@@ -9,19 +9,19 @@
  * Functions for low-level PWM controlling
  */
 
-void setChannelPower(char val, char channel){
+void setChannelPower(char val, PWM_Channel channel){
     
     uint32_t pulse = ARR_VAL * val / 255;
     
     switch(channel){
         
-        case 1:
+        case PWM_FirstChannel:
             TIM_SetCompare1(PWM_TIM, pulse);
             break;
-        case 2:
+        case PWM_SecondChannel:
             TIM_SetCompare2(PWM_TIM, pulse);
             break;
-        case 3:
+        case PWM_ThirdChannel:
             TIM_SetCompare3(PWM_TIM, pulse);
             break;
     }

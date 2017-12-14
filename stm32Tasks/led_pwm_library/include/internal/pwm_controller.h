@@ -1,6 +1,12 @@
 #ifndef PWM_CONTROLLER
 #define PWM_CONTROLLER
 
+
+typedef enum {
+    
+    PWM_FirstChannel, PWM_SecondChannel, PWM_ThirdChannel
+} PWM_Channel;
+
 /**
  * @file internal/pwm_controller.h
  *
@@ -13,9 +19,9 @@
  * Duty cycle (%) is \f$ \frac{x}{255} * 100 \f$
  *
  * @param val 
- * @param channel Timer channel. Can be one of 1, 2, 3
+ * @param channel
  */
-void setChannelPower(char val, char channel);
+void setChannelPower(char val, PWM_Channel channel);
 
 /**
  * @brief Sets duty cycles for all channels

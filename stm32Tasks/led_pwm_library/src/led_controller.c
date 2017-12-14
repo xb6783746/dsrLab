@@ -44,19 +44,19 @@ void setRGB(char r, char g, char b){
 
 void setBrightness(char brightness, Channel channel){
     
-    char ch = 0;
+    PWM_Channel ch;
     char value = gammaCorrection(brightness);
     
     switch(channel){
         
         case Red:
-            ch = 1;
+            ch = PWM_FirstChannel;
             break;
         case Green:
-            ch = 2;
+            ch = PWM_SecondChannel;
             break;
         case Blue:
-            ch = 3;
+            ch = PWM_ThirdChannel;
             break;
     }
     
