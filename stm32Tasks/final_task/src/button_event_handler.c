@@ -1,6 +1,7 @@
 #include <button_event_handler.h>
 #include <led_api.h>
 #include <stm32f4disc_leds.h>
+#include <lcd_led_info.h>
 
 #define CHANNEL_COUNT 3
 #define STEP 10
@@ -17,6 +18,8 @@ static uint32_t currChannel;
 void initButtonEventHandler(){
 
     initStm32DiscLeds();
+    
+    lcdLedInfoInit();
     
     extLedsChannels[0] = Red;
     extLedsChannels[1] = Green;
@@ -38,29 +41,34 @@ void initButtonEventHandler(){
     setRGB(0, 0, 0);
     setBrightness(currBrightness[currChannel], extLedsChannels[currChannel]); 
     switchLed(leds[currChannel], 1);
+    lcdLedInfoSetCurrentChannel(currChannel);
+    lcdLedInfoSetValues(currBrightness[Red], currBrightness[Green], currBrightness[Blue]);
 }
 
 void processButtonEvents(void){
     
     if(brightnessButtonFlag){
         
-        brightnessButtonFlag = 0;
-        
         char br = currBrightness[currChannel];
         
         currBrightness[currChannel] = (br + STEP) % 255;
         
-        setBrightness(currBrightness[currChannel], extLedsChannels[currChannel]);  
+        setBrightness(currBrightness[currChannel], extLedsChannels[currChannel]); 
+        
+        lcdLedInfoSetValues(currBrightness[Red], currBrightness[Green], currBrightness[Blue]);
+        
+        brightnessButtonFlag = 0;
     }
 
     if(channelButtonFlag){
-        
-        channelButtonFlag = 0;
 
         switchLed(leds[currChannel], 0);
         
         currChannel = (currChannel + 1) % CHANNEL_COUNT;
         
         switchLed(leds[currChannel], 1);
+        lcdLedInfoSetCurrentChannel(currChannel);
+        
+        channelButtonFlag = 0;
     }    
 }
