@@ -5,11 +5,19 @@
 
 #include <math.h>
 
-#ifndef GAMMA_CORRECTION_PARAMETER
+#ifndef GAMMA_CORRECTION_PARAMETER_R
 
-#define GAMMA_CORRECTION_PARAMETER_R 3.03
-#define GAMMA_CORRECTION_PARAMETER_G 2.0
-#define GAMMA_CORRECTION_PARAMETER_B 3.03
+    #define GAMMA_CORRECTION_PARAMETER_R 3.03
+#endif
+
+#ifndef GAMMA_CORRECTION_PARAMETER_G
+
+    #define GAMMA_CORRECTION_PARAMETER_G 2.0
+#endif
+
+#ifndef GAMMA_CORRECTION_PARAMETER_B
+
+    #define GAMMA_CORRECTION_PARAMETER_B 3.03
 #endif
 
 /**
@@ -18,8 +26,8 @@
  * Functions for controlling RGB led.
  *
  * Functions sets gamma-corected values of brightness.
- * \f$ realValue = 255 * (\frac{x}{255})^\gamma \f$, where value of \f$ \gamma \f$ can be defined as
- * GAMMA_CORRECTION_PARAMETER. Default value is 3.03
+ * \f$ realValue = 255 * (\frac{x}{255})^\gamma \f$, where value of \f$ \gamma \f$ can be defined 
+ * by each channel as GAMMA_CORRECTION_PARAMETER_[R | G | B].
  */
 
 int __errno;
@@ -27,7 +35,7 @@ int __errno;
 /**
  * @brief Function for gamma-correcting
  *
- * @return \f$ 255 * (\frac{val}{255})^\gamma \f$, where \f$ \gamma \f$ is GAMMA_CORRECTION_PARAMETER
+ * @return \f$ 255 * (\frac{val}{255})^\gamma \f$, where \f$ \gamma \f$ is GAMMA_CORRECTION_PARAMETER for channel
  */
 static uint8_t gammaCorrection(Channel ch, uint8_t val){
     
