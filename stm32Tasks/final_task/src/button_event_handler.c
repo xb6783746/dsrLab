@@ -12,7 +12,7 @@ extern char channelButtonFlag;
 static Channel extLedsChannels[CHANNEL_COUNT];
 static Stm32f4disc_leds_enum leds[CHANNEL_COUNT];
 
-static char currBrightness[CHANNEL_COUNT];
+static uint8_t currBrightness[CHANNEL_COUNT];
 static uint32_t currChannel;
 
 void initButtonEventHandler(){
@@ -49,7 +49,7 @@ void processButtonEvents(void){
     
     if(brightnessButtonFlag){
         
-        char br = currBrightness[currChannel];
+        uint8_t br = currBrightness[currChannel];
         
         currBrightness[currChannel] = (br + STEP) % 255;
         

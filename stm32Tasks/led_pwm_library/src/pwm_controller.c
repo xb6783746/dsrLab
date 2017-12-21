@@ -1,7 +1,6 @@
 #include <internal/pwm_controller.h>
 #include <internal/led_pwm_configuration.h>
 
-#include <stm32f4xx.h>
 
 /**
  * @file pwm_controller.c
@@ -9,7 +8,7 @@
  * Functions for low-level PWM controlling
  */
 
-void setChannelPower(char val, PWM_Channel channel){
+void setChannelPower(uint8_t val, PWM_Channel channel){
     
     uint32_t pulse = ARR_VAL * val / 255;
     
@@ -27,7 +26,7 @@ void setChannelPower(char val, PWM_Channel channel){
     }
 }
 
-void setPower(char ch1, char ch2, char ch3){
+void setPower(uint8_t ch1, uint8_t ch2, uint8_t ch3){
     
     uint32_t pulse = ARR_VAL * ch1 / 255;
     TIM_SetCompare1(PWM_TIM, pulse);

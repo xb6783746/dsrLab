@@ -1,6 +1,7 @@
 #ifndef PWM_CONTROLLER
 #define PWM_CONTROLLER
 
+#include <stm32f4xx.h>
 
 typedef enum {
     
@@ -21,7 +22,7 @@ typedef enum {
  * @param val 
  * @param channel
  */
-void setChannelPower(char val, PWM_Channel channel);
+void setChannelPower(uint8_t val, PWM_Channel channel);
 
 /**
  * @brief Sets duty cycles for all channels
@@ -29,6 +30,6 @@ void setChannelPower(char val, PWM_Channel channel);
  * Duty cycle (%) is \f$ \frac{x}{255} * 100 \f$
  * 
  */
-void setPower(char ch1, char ch2, char ch3);
+void setPower(uint8_t ch1, uint8_t ch2, uint8_t ch3);
 
 #endif

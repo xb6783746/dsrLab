@@ -2,7 +2,6 @@
 #define LED_API
 
 #include <led_pwm_common_structures.h>
-
 /**
  * @file led_api.h
  *
@@ -23,7 +22,7 @@
  * @param g Brightness for green channel
  * @param b Brightness for blue channel
  */
-void setRGB(char r, char g, char b);
+void setRGB(uint8_t r, uint8_t g, uint8_t b);
 
 /**
  * @brief Set brightness for specific channel
@@ -35,6 +34,6 @@ void setRGB(char r, char g, char b);
  * @param channel See #Channel
  *
  */
-void setBrightness(char brightness, Channel channel);
+void setBrightness(uint8_t brightness, Channel channel);
 
 #endif
